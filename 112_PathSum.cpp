@@ -1,17 +1,21 @@
- #include <bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-struct TreeNode {
+struct TreeNode
+{
     int val;
-    TreeNode* left;
-    TreeNode* right;
+    TreeNode *left;
+    TreeNode *right;
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
-bool hasPathSum(TreeNode* root, int targetSum) {
-    if (!root) return false;
+bool hasPathSum(TreeNode *root, int targetSum)
+{
+    if (!root)
+        return false;
 
     // If it's a leaf node, check if the remaining sum equals the node's value
-    if (!root->left && !root->right) {
+    if (!root->left && !root->right)
+    {
         return targetSum == root->val;
     }
 
@@ -19,6 +23,7 @@ bool hasPathSum(TreeNode* root, int targetSum) {
     int remaining = targetSum - root->val;
     return hasPathSum(root->left, remaining) || hasPathSum(root->right, remaining);
 }
-int main() {
+int main()
+{
     return 0;
 }
