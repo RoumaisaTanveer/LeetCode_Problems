@@ -1,55 +1,60 @@
-#include <unordered_map>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
-
-// Definition for a Node.
-class Node
-{
-public:
-    int val;
-    vector<Node *> neighbors;
-
-    Node()
-    {
-        val = 0;
-        neighbors = vector<Node *>();
-    }
-
-    Node(int _val)
-    {
-        val = _val;
-        neighbors = vector<Node *>();
-    }
-
-    Node(int _val, vector<Node *> _neighbors)
-    {
-        val = _val;
-        neighbors = _neighbors;
-    }
-};
 
 class Solution
 {
 public:
-    unordered_map<Node *, Node *> visited;
-
-    Node *cloneGraph(Node *node)
+    void dfs(int r, int c, vector<vector<char>> &board, int rows, int cols)
     {
-        if (!node)
-            return nullptr;
+        if (r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] != 'O')
+            return;
 
-        if (visited.find(node) != visited.end())
+        board[r][c] = 'T'; // Mark as safe
+
+        dfs(r + 1, c, board, rows, cols);
+        dfs(r - 1, c, board, rows, cols);
+        dfs(r, c + 1, board, rows, cols);
+        dfs(r, c - 1, board, rows, cols);
+    }
+
+    void solve(vector<vector<char>> &board)
+    {
+        int rows = board.size();
+        if (rows == 0)
+            return;
+        int cols = board[0].size();
+
+        // Step 1: DFS from border 'O's
+        for (int r = 0; r < rows; r++)
         {
-            return visited[node];
+            if (board[r][0] == 'O')
+                dfs(r, 0, board, rows, cols);
+            if (board[r][cols - 1] == 'O')
+                dfs(r, cols - 1, board, rows, cols);
+        }
+        for (int c = 0; c < cols; c++)
+        {
+            if (board[0][c] == 'O')
+                dfs(0, c, board, rows, cols);
+            if (board[rows - 1][c] == 'O')
+                dfs(rows - 1, c, board, rows, cols);
         }
 
-        Node *clone = new Node(node->val);
-        visited[node] = clone;
-
-        for (Node *neighbour : node->neighbors)
+        // Step 2: Flip and restore
+        for (int r = 0; r < rows; r++)
         {
-            clone->neighbors.push_back(cloneGraph(neighbour));
+            for (int c = 0; c < cols; c++)
+            {
+                if (board[r][c] == 'O')
+                    board[r][c] = 'X';
+                else if (board[r][c] == 'T')
+                    board[r][c] = 'O';
+            }
         }
-        return clone;
     }
 };
+
+int main()
+{
+    return 0;
+}
